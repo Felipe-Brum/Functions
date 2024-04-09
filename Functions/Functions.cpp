@@ -21,6 +21,76 @@ void addEdge(vector<vector<int> >& adjList, int u, int v)
 }
 
 class MyFunctions {
+private:
+
+    //Do quickSort
+    int partition(vector<int>& array, int start, int end) {
+
+        int pivot = array[end];
+        int i = start - 1;
+        for (int j = start; j <= end - 1; j++) {
+            if (array[j] < pivot) {
+                i++;
+                swap(array[i], array[j]);
+            }
+        }
+        i++;
+        swap(array[i], array[end]);
+
+        return i;
+    }
+    //Do radixSort
+    int getMax(vector<int>& array, int n) {
+        int mx = array[0];
+        for (int i = 1; i < n; i++) {
+            if (array[i] > mx) {
+                mx = array[i];
+            }
+        }
+        return mx;
+    }
+
+    //Do radixSort
+    void countSort(vector<int>& array, int n, int exp) {
+        vector<int> output(n);
+        vector<int> count(10, 0);
+
+        for (int i = 0; i < n; i++) {
+            count[(array[i] / exp) % 10]++;
+        }
+
+        for (int i = 1; i < 10; i++) {
+            count[i] += count[i - 1];
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            output[count[(array[i] / exp) % 10] - 1] = array[i];
+            count[(array[i] / exp) % 10]--;
+        }
+
+        for (int i = 0; i < n; i++) {
+            array[i] = output[i];
+        }
+    }
+    //Do heapSort
+    void heapify(vector<int>& heap, int curr, int size) {
+        int largest = curr;
+        int l = 2 * curr + 1;
+        int r = 2 * curr + 2;
+
+        if (l < size && heap[l] > heap[largest]) {
+            largest = l;
+        }
+        if (r < size && heap[r] > heap[largest]) {
+            largest = r;
+        }
+        if (largest != curr) {
+            swap(heap[curr], heap[largest]);
+
+            heapify(heap, largest, size);
+        }
+    }
+
 public:
 
     static void insertionSort(vector<int>& arr) {
@@ -91,24 +161,7 @@ public:
         return -1;
     }
 
-    //Do headSort
-    void heapify(vector<int>& heap, int curr, int size) {
-        int largest = curr;
-        int l = 2 * curr + 1;
-        int r = 2 * curr + 2;
 
-        if (l < size && heap[l] > heap[largest]) {
-            largest = l;
-        }
-        if (r < size && heap[r] > heap[largest]) {
-            largest = r;
-        }
-        if (largest != curr) {
-            swap(heap[curr], heap[largest]);
-
-            heapify(heap, largest, size);
-        }
-    }
 
     void heapSort(vector<int>& list) {
         for (int i = list.size() / 2 - 1; i >= 0; i--) {
@@ -120,22 +173,6 @@ public:
         }
     }
 
-    //Do quickSort
-    int partition(vector<int>& array, int start, int end) {
-
-        int pivot = array[end];
-        int i = start - 1;
-        for (int j = start; j <= end - 1; j++) {
-            if (array[j] < pivot) {
-                i++;
-                swap(array[i], array[j]);
-            }
-        }
-        i++;
-        swap(array[i], array[end]);
-
-        return i;
-    }
 
     void quickSort(vector<int>& array, int start, int end) {
 
@@ -147,39 +184,6 @@ public:
 
     }
 
-    //Do radixSort
-    int getMax(vector<int>& array, int n) {
-        int mx = array[0];
-        for (int i = 1; i < n; i++) {
-            if (array[i] > mx) {
-                mx = array[i];
-            }
-        }
-        return mx;
-    }
-
-    //Do radixSort
-    void countSort(vector<int>& array, int n, int exp) {
-        vector<int> output(n);
-        vector<int> count(10, 0);
-
-        for (int i = 0; i < n; i++) {
-            count[(array[i] / exp) % 10]++;
-        }
-
-        for (int i = 1; i < 10; i++) {
-            count[i] += count[i - 1];
-        }
-
-        for (int i = n - 1; i >= 0; i--) {
-            output[count[(array[i] / exp) % 10] - 1] = array[i];
-            count[(array[i] / exp) % 10]--;
-        }
-
-        for (int i = 0; i < n; i++) {
-            array[i] = output[i];
-        }
-    }
 
     void radixSort(vector<int>& array, int size) {
         int m = getMax(array, size);
@@ -213,6 +217,11 @@ public:
 MyFunctions functions;
 
 int main() {
-
+    vector<int> pimba = { 1,23,24,2,432,321,32,3};
+    functions.radixSort(pimba, pimba.size());
+    for (int a : pimba) {
+        cout << a << " ";
+    }
+    
     return 0;
 }
